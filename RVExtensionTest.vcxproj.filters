@@ -45,6 +45,9 @@
     <ClInclude Include="lib\imgui\backends\imgui_impl_win32.h">
       <Filter>Source Files\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="CtxBackup.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -73,6 +76,9 @@
     </ClCompile>
     <ClCompile Include="lib\imgui\backends\imgui_impl_win32.cpp">
       <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="CtxBackup.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

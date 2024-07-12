@@ -2,6 +2,7 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 #include <d3d11.h>
+#include "CtxBackup.hpp"
 #include "RVExtensionUtil.hpp"
 
 bool isInit = false;
@@ -75,6 +76,7 @@ bool WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return false;
 }
 
+static const RVExtensionRenderInfo* deviceData = nullptr;
 void ImguiInit()
 {
     auto deviceDataPtr = reinterpret_cast<const RVExtensionRenderInfo* const *>(FindRVFunction("RVExtensionGData"));
@@ -83,7 +85,7 @@ void ImguiInit()
     if (!deviceDataPtr || !GetGPULock || !setWindowHook)
         return;
 
-    auto deviceData = *deviceDataPtr;
+    deviceData = *deviceDataPtr;
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -169,10 +171,16 @@ void ImguiRenderTick()
     // Rendering
     // We render onto active rendertarget in game. Which (inside draw3D eventhandler) will be the UI target. The game will clear it for us so we just render ontop of it
     // Using https://community.bistudio.com/wiki/User_Interface_Event_Handlers#onDraw would have the current UI target set to the UIOnTexture, so drawing from within there could draw into a texture
+    // Note that before rendering, you must back up the context stage parameters, and restore them before releasing the lock, otherwise the game renderer might break
+    // A helper class, DX11::ContextBackup, is provided for this purpose
     ImGui::Render();
 
     {
         GPULockScope guard;
+
+        // No need to do this for ImGui; it already does back up and restore the context; see the definition of the "ImGui_ImplDX11_RenderDrawData" function
+        /* DX11::ContextBackup ctxBackup{deviceData->d3dDeviceContext}; */
+
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
     }
 
