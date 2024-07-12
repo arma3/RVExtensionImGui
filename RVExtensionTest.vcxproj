@@ -150,6 +150,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CtxBackup.hpp" />
+    <ClInclude Include="DxDef.hpp" />
+    <ClInclude Include="DxImp.hpp" />
     <ClInclude Include="lib\imgui\backends\imgui_impl_dx11.h" />
     <ClInclude Include="lib\imgui\backends\imgui_impl_win32.h" />
     <ClInclude Include="lib\imgui\imconfig.h" />
@@ -161,6 +164,7 @@
     <ClInclude Include="RVExtensionUtil.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CtxBackup.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="lib\imgui\backends\imgui_impl_dx11.cpp" />
     <ClCompile Include="lib\imgui\backends\imgui_impl_win32.cpp" />
