@@ -151,6 +151,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CtxBackup.hpp" />
+    <ClInclude Include="ImGuiBackendArmaControl.hpp" />
+    <ClInclude Include="ImguiExtensionControl.hpp" />
     <ClInclude Include="lib\imgui\backends\imgui_impl_dx11.h" />
     <ClInclude Include="lib\imgui\backends\imgui_impl_win32.h" />
     <ClInclude Include="lib\imgui\imconfig.h" />
@@ -164,6 +166,8 @@
   <ItemGroup>
     <ClCompile Include="CtxBackup.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="ImGuiBackendArmaControl.cpp" />
+    <ClCompile Include="ImguiExtensionControl.cpp" />
     <ClCompile Include="lib\imgui\backends\imgui_impl_dx11.cpp" />
     <ClCompile Include="lib\imgui\backends\imgui_impl_win32.cpp" />
     <ClCompile Include="lib\imgui\imgui.cpp" />

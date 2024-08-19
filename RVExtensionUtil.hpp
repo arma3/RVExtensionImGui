@@ -35,6 +35,56 @@ struct RVContext_StackTrace
 };
 
 
+struct CExtensionControlInterface
+{
+	CExtensionControlInterface()
+	{
+		memset(this, 0, sizeof(CExtensionControlInterface));
+	}
+
+	uint64_t size = sizeof(CExtensionControlInterface);
+
+	// This is passed to every callback
+	void* context;
+
+	// [required]
+	// Render into currently active RenderTarget
+	void (*OnDraw)(void* context, float alpha);
+	// [required]
+	// Called after "Unload" display EH and "Destroy" control EH
+	// This is the last call before the control is destroyed. Release all your resources
+	void (*OnDestroy)(void* context, int code);
+
+	// optional
+	// Called before OnDraw, if the control (including backing render target) size has changed
+	void (*OnSizeChanged)(void* context, unsigned int width, unsigned int height);
+
+	// Interactions
+	// Optional all of these
+
+	// Return if you accept the focus
+	bool (*OnSetFocus)(void* context, bool focus);
+
+	void (*OnLButtonDown)(void* context, float x, float y);
+	void (*OnLButtonUp)(void* context, float x, float y);
+	void (*OnLButtonClick)(void* context, float x, float y);
+	void (*OnLButtonDblClick)(void* context, float x, float y);
+	void (*OnRButtonDown)(void* context, float x, float y);
+	void (*OnRButtonUp)(void* context, float x, float y);
+	void (*OnRButtonClick)(void* context, float x, float y);
+	void (*OnMouseMove)(void* context, float x, float y);
+	// Return if the input was handled, if not it will be passed to the parent controlsgroup/display
+	bool (*OnMouseZChanged)(void* context, float dz);
+
+	void (*OnMouseEnter)(void* context, float x, float y);
+	void (*OnMouseExit)(void* context, float x, float y);
+
+	// Return if the key was handled, if not it will be passed to the parent controlsgroup/display
+	bool (*OnKeyDown)(void* context, int dikCode);
+	bool (*OnKeyUp)(void* context, int dikCode);
+	bool (*OnChar)(void* context, unsigned nChar, unsigned nRepCnt, unsigned nFlags);
+};
+
 #ifdef _D3D11_CONSTANTS // Only available with d3d11.h header
 struct RVExtensionRenderInfo
 {
@@ -82,6 +132,8 @@ extern "C"
 	DLLEXPORT int CALL_CONVENTION RVExtensionArgs(char* output, unsigned int outputSize, const char* function, const char** argv, unsigned int argc);
 	//--- Extension Callback
 	DLLEXPORT void CALL_CONVENTION RVExtensionRegisterCallback(RVExtensionCallbackProc* callbackProc);
+	//--- Request creation of UI element
+	DLLEXPORT bool CALL_CONVENTION RVExtensionRequestUI(const char* uiClass, CExtensionControlInterface* interfaceStruct);
 }
 
 inline const void* FindRVFunction(const char* name)

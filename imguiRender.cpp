@@ -79,8 +79,11 @@ bool WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 static const RVExtensionRenderInfo* deviceData = nullptr;
 void ImguiInit()
 {
+    if (isInit)
+        return;
+
     auto deviceDataPtr = reinterpret_cast<const RVExtensionRenderInfo* const *>(FindRVFunction("RVExtensionGData"));
-    GetGPULock = reinterpret_cast< RVExtensionGLockProc*>(FindRVFunction("RVExtensionGLock"));
+    GetGPULock = reinterpret_cast<RVExtensionGLockProc*>(FindRVFunction("RVExtensionGLock"));
     auto setWindowHook = reinterpret_cast<RVExtensionGSetWHkProc*>(FindRVFunction("RVExtensionGSetWHk"));
     if (!deviceDataPtr || !GetGPULock || !setWindowHook)
         return;
