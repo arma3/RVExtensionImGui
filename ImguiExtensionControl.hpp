@@ -1,8 +1,8 @@
 #pragma once
-#include <chrono>
+#include <cstdint>
 
 #include "imgui_internal.h"
-
+struct ID3D11RenderTargetView;
 
 class ImguiExtensionControl
 {
@@ -18,7 +18,7 @@ public:
 
     void OnSizeChanged(unsigned int width, unsigned int height);
 
-    void OnDraw(float alpha);
+    void OnDraw(float alpha, ID3D11RenderTargetView* target);
     void OnDestroy(int code);
     bool OnSetFocus(bool focus);
 

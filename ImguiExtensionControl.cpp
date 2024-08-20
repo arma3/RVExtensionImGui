@@ -10,13 +10,10 @@
 #include "ImGuiBackendArmaControl.hpp"
 #include "RVExtensionUtil.hpp"
 
-extern void ImguiInit();
-
-
 #include <dinput.h>
-ImGuiKey Dik2ImGui[256] {};
+static ImGuiKey Dik2ImGui[256] {};
 
-void InitDikTranslation()
+static void InitDikTranslation()
 {
     std::array<std::pair<int, ImGuiKey>, 103> mapping{
         // dinput key, virtual key
@@ -197,7 +194,7 @@ ImguiExtensionControl::~ImguiExtensionControl()
     {
         ImGuiSetCurrentContext _c(_context);
         ImGui_ImplDX11_Shutdown();
-        ImGui_ImplWin32_Shutdown();
+        ImGui_ImplArma_Shutdown();
     }
 
     ImGui::DestroyContext(_context);
@@ -215,7 +212,7 @@ void ImguiExtensionControl::OnSizeChanged(unsigned int width, unsigned int heigh
 }
 
 
-void ImguiExtensionControl::OnDraw(float alpha)
+void ImguiExtensionControl::OnDraw(float alpha, ID3D11RenderTargetView* target)
 {
     ImGuiSetCurrentContext _c(_context);
 

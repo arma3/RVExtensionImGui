@@ -42,14 +42,24 @@ struct CExtensionControlInterface
 		memset(this, 0, sizeof(CExtensionControlInterface));
 	}
 
-	uint64_t size = sizeof(CExtensionControlInterface);
+	uint32_t size = sizeof(CExtensionControlInterface);
+
+	enum Flags : uint32_t
+	{
+		None = 0,
+		DynamicTexture = 1 << 0, // If set we do not set render target, and instead pass a texture that can be mapped with D3D11_MAP_WRITE_DISCARD
+		TextureFormatBGRA = 1 << 1 // If set the texture is BGRA, if not set its ARGB
+	};
+	Flags flags = Flags::None;
 
 	// This is passed to every callback
 	void* context;
 
 	// [required]
-	// Render into currently active RenderTarget
-	void (*OnDraw)(void* context, float alpha);
+	// Render into currently active target
+	// target is a ID3D11RenderTargetView if Flags::DynamicTexture is not set
+	// target is a ID3D11Texture2D if Flags::DynamicTexture is set
+	void (*OnDraw)(void* context, float alpha, void* target);
 	// [required]
 	// Called after "Unload" display EH and "Destroy" control EH
 	// This is the last call before the control is destroyed. Release all your resources
